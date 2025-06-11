@@ -399,7 +399,7 @@ function(input, output, session) {
               )
     plot <- p %>%
       ggplot(aes(x = coin, y = price_norm)) +
-      geom_boxplot(fill=bar_colr, outlier.size = 0.5) +
+      geom_boxplot(fill=bar_colr, outlier.size = 1, color="#87CEEB") +
       geom_hline(yintercept = 1, linetype = "solid", color = "green") +
       scale_y_continuous(labels = comma_format(), expand = expansion(mult = c(0, 0.01))) +
       labs(x = "", 
@@ -409,7 +409,9 @@ function(input, output, session) {
             axis.ticks.x = element_blank(),
             axis.text.x = element_text(size = font_sz),
             axis.text.y = element_text(size = font_sz),
-            plot.title = element_text(size = chart_tsz, hjust = chart_thj))
+            plot.title = element_text(size = chart_tsz, hjust = chart_thj),
+            panel.grid.major.x = element_blank(),
+          panel.grid.minor.y = element_blank())
   
     #ggplotly(plot)
     plot
