@@ -81,6 +81,7 @@ if(file.exists(here("data/prices.rds")) &
     } # end loop
   # save prices to only refresh when needed
   saveRDS(prices, file = here("data/prices.rds"))
+  cat("new price data collected \n")
   } # end if file exists
 
 ### merge with portfolio ----
@@ -129,12 +130,15 @@ port_ttl_date_ret <- port_ttl_date %>%
     pct_7d = (total_value / lag(total_value, 7) - 1),
     pct_30d = (total_value / lag(total_value, 30) - 1),
     pct_90d = (total_value / lag(total_value, 90) - 1),
-    pct_365d = (total_value / lag(total_value, 365) - 1)
+    pct_365d = (total_value / lag(total_value, 365) - 1),
+    #annual compound % return - easy since all invested on one original date
+    cagr = (total_value / total_invest)^(1/(as.numeric(date - min(date))/365.25)) -1
   )
+
 # test: as of latest date -> just filter in plot code
 port_ttl_date_ret_latest <- port_ttl_date_ret %>%
   filter(date == max(date)) %>%
-  select(date, pct_1d, pct_7d, pct_30d, pct_90d, pct_365d)
+  select(date, pct_1d, pct_7d, pct_30d, pct_90d, pct_365d, cagr)
 
 
 # Define server logic ----
@@ -204,9 +208,11 @@ function(input, output, session) {
       pct_7d = (total_value / lag(total_value, 7) - 1),
       pct_30d = (total_value / lag(total_value, 30) - 1),
       pct_90d = (total_value / lag(total_value, 90) - 1),
-      pct_365d = (total_value / lag(total_value, 365) - 1)
+      pct_365d = (total_value / lag(total_value, 365) - 1),
+      #annual compound % return - easy since all invested on one original date
+      cagr = (total_value / total_invest)^(1/(as.numeric(date - min(date))/365.25)) -1
     ) %>%
-      select(date, pct_1d, pct_7d, pct_30d, pct_90d, pct_365d)
+      select(date, pct_1d, pct_7d, pct_30d, pct_90d, pct_365d, cagr)
   })
   ## prep: port_price_latest_filtered ----
   port_price_latest_filtered <- reactive({
@@ -462,7 +468,7 @@ function(input, output, session) {
     port_ttl_dates_ret() %>% 
       filter(date == max(date)) %>% 
       setNames(c(
-        "Returns as of", "1-day", "7-day", "30-day", "90-day", "1-year"
+        "Returns as of", "1-day", "7-day", "30-day", "90-day", "1-year","CAGR"
       )) %>%
       datatable(
         class = "display compact",
@@ -473,9 +479,9 @@ function(input, output, session) {
         ),
         rownames = FALSE
       ) %>%
-      formatPercentage(c("1-day", "7-day", "30-day", "90-day", "1-year"), digits = 1) %>%
+      formatPercentage(c("1-day", "7-day", "30-day", "90-day", "1-year","CAGR"), digits = 1) %>%
       formatStyle(
-        columns = c("1-day", "7-day", "30-day", "90-day", "1-year"),
+        columns = c("1-day", "7-day", "30-day", "90-day", "1-year","CAGR"),
         backgroundColor = styleInterval(0, c("red", "green")),
         color = "white"
       )
