@@ -9,6 +9,11 @@ Built using R Shiny.
 Published on [Posit Connect Cloud](https://fig4-crypto-mom.share.connect.posit.cloud/).
 Embedded in www.Fig4.com/products/crypto-mom.html
 
+Note: need to create manifest.json doc first to specify libraries, etc.
+
+* console: rsconnect::writeManifest()
+* update if new libraries added or other system changes
+
 ## how it works
 1. imports google sheet with portfolio information -> coins purchased, when, at what price.
 2. fetches daily prices for each coin from date of purchase.
