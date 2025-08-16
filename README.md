@@ -7,6 +7,9 @@ Built using R Shiny.
 
 ## publication
 Published on [Posit Connect Cloud](https://fig4-crypto-mom.share.connect.posit.cloud/).
+
+* automatic deployment from GitHub repository
+
 Embedded in www.Fig4.com/products/crypto-mom.html
 
 Note: need to create manifest.json doc first to specify libraries, etc.
