@@ -428,7 +428,8 @@ function(input, output, session) {
                   class = "display compact",
                   options = list(dom = 't', # table only - no search, pagination, etc.
                                  ordering = FALSE,
-                                 autoWidth = TRUE),
+                                 autoWidth = FALSE,
+                                 responsive = TRUE),
                   rownames = FALSE # hide row names
                   ) %>%
         formatCurrency("total_invest", "$", digits = 0) %>%
@@ -449,7 +450,8 @@ function(input, output, session) {
                                        "total_value", "gain", "roi")], 
                   class = "display hover compact",
                   options = list(dom = 't', 
-                                 autoWidth = TRUE),
+                                autoWidth = FALSE,
+                                responsive = TRUE),
                   rownames = FALSE) %>%
         formatRound("amt_purch", digits = 2) %>%
         formatCurrency("price_purch", "$", digits = 2) %>%
@@ -475,7 +477,8 @@ function(input, output, session) {
         options = list(
           dom = 't',
           ordering = FALSE,
-          autoWidth = TRUE
+          autoWidth = FALSE,
+          responsive = TRUE
         ),
         rownames = FALSE
       ) %>%
